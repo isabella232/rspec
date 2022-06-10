@@ -1,0 +1,96 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Using the value of a pointer to a <code>FILE</code> object after the associated file is closed is undefined behavior.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">void fun() {
+  FILE * pFile;
+  pFile = fopen(fileName, "w");
+
+  if (condition) {
+    fclose(pFile);
+    // ...
+  }
+
+  fclose(pFile); // Noncompliant, the file has already been closed
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">void fun() {
+  FILE * pFile;
+  pFile = fopen(fileName, "w");
+
+  if (condition) {
+    // ...
+  }
+
+  fclose(pFile);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://wiki.sei.cmu.edu/confluence/x/QdUxBQ">CERT, FIO46-C.</a> - Do not access a closed file</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>File "xxx" has already been closed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>primary: <code>FILE</code> access</p>
+</div>
+<div class="paragraph">
+<p>secondary: where the <code>FILE</code> was closed</p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comments_and_links">Comments And Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_relates_to_s5485">relates to: <a data-rspec-id="S5485" class="rspec-auto-link">S5485</a></h3>
+
+</div>
+</div>
+</div>

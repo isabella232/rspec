@@ -1,0 +1,116 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Array overruns and buffer overflows happen when memory access accidentally goes beyond the boundary of the allocated array or buffer. These overreaching accesses cause some of the most damaging, and hard to track defects.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">int array[10];
+array[10] = 0; // Noncompliant: index should be between 0 &amp; 9
+
+char *buffer1 = (char *) malloc(100);
+char *buffer2 = (char *) malloc(50);
+memcpy(buffer2, buffer1, 100); // Noncompliant: buffer2 will overflow.</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">int array[10];
+array[9] = 0;
+
+char *buffer1 = (char *) malloc(100);
+char *buffer2 = (char *) malloc(50);
+memcpy(buffer2, buffer1, 50);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/119">MITRE, CWE-119</a> - Improper Restriction of Operations within the Bounds of a Memory Buffer</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/131">MITRE, CWE-131</a> - Incorrect Calculation of Buffer Size</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/788">MITRE, CWE-788</a> - Access of Memory Location After End of Buffer</p>
+</li>
+<li>
+<p><a href="https://wiki.sei.cmu.edu/confluence/x/wtYxBQ">CERT, ARR30-C.</a> - Do not form or use out-of-bounds pointers or array subscripts</p>
+</li>
+<li>
+<p><a href="https://wiki.sei.cmu.edu/confluence/x/i3w-BQ">CERT, STR50-CPP.</a> - Guarantee that storage for strings has sufficient space for character data and the null terminator</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Review this array access; it is likely to be an overrun.</p>
+</li>
+<li>
+<p>Review this memory access; it is likely to create an overflow.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>Primary: Array access or function call</p>
+</div>
+<div class="paragraph">
+<p>Secondary: * Index value for arrays</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Length value for functions call</p>
+</li>
+<li>
+<p>For loop end condition if applicable</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comments_and_links">Comments And Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_is_related_to_s5782">is related to: <a data-rspec-id="S5782" class="rspec-auto-link">S5782</a></h3>
+
+</div>
+</div>
+</div>

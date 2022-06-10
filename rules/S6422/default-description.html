@@ -1,0 +1,113 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Making blocking calls to <code>async</code> methods transforms code that was intended to be asynchronous into a blocking operation. Doing so inside an Azure Function can lead to thread exhaustion.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">To Do This …</th>
+<th class="tableblock halign-center valign-top">Instead of This …</th>
+<th class="tableblock halign-center valign-top">Use This</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Retrieve the result of a background task</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Task.Wait</code>, <code>Task.Result</code> or <code>Task.GetAwaiter.GetResult</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>await</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Wait for any task to complete</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Task.WaitAny</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>await Task.WhenAny</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Retrieve the results of multiple tasks</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Task.WaitAll</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>await Task.WhenAll</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Wait a period of time</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Thread.Sleep</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>await Task.Delay</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-csharp" data-lang="csharp">public static class AvoidBlockingCalls
+{
+	[FunctionName("Foo")]
+	public static async Task&lt;IActionResult&gt; Foo([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req)
+	{
+		// This can lead to thread exhaustion
+		string requestBody = new StreamReader(req.Body).ReadToEndAsync().Result;
+
+		// do stuff...
+	}
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-csharp" data-lang="csharp">public static class AvoidBlockingCalls
+{
+	[FunctionName("Foo")]
+	public static async Task&lt;IActionResult&gt; Foo([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req)
+	{
+		string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+
+		// do stuff...
+	}
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://msdn.microsoft.com/en-us/magazine/jj991977.aspx">Async/Await - Best Practices in Asynchronous Programming</a></p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/azure-functions/performance-reliability#use-async-code-but-avoid-blocking-calls">Improve the performance and reliability of Azure Functions - Scalability best practices</a></p>
+</li>
+<li>
+<p><a data-rspec-id="S4462" class="rspec-auto-link">S4462</a> - a more generic rule about detecting blocking calls to <code>async</code> methods.</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="paragraph">
+<p>The implementation should be common with <a data-rspec-id="S4462" class="rspec-auto-link">S4462</a>. When implementing, should make sure <a data-rspec-id="S4462" class="rspec-auto-link">S4462</a> will ignore Azure Functions.</p>
+</div>
+</div>
+</div>

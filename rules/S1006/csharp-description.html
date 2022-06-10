@@ -1,0 +1,134 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Default arguments are determined by the static type of the object. If a default argument is different for a parameter in an overriding method, the value used in the call will be different when calls are made via the base or derived object, which may be contrary to developer expectations.</p>
+</div>
+<div class="paragraph">
+<p>Default parameter values are useless in explicit interface implementations, because the static type of the object will always be the implemented interface. Thus, specifying default values is useless and confusing.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-csharp" data-lang="csharp">using System;
+
+public class Base
+{
+    public virtual void Write(int i = 42)
+    {
+        Console.WriteLine(i);
+    }
+}
+
+public class Derived : Base
+{
+    public override void Write(int i = 5) // Noncompliant
+    {
+        Console.WriteLine(i);
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        var derived = new Derived();
+        derived.Write(); // writes 5
+        Print(derived); // writes 42; was that expected?
+    }
+
+    private static void Print(Base item)
+    {
+        item.Write();
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-csharp" data-lang="csharp">using System;
+
+public class Base
+{
+    public virtual void Write(int i = 42)
+    {
+        Console.WriteLine(i);
+    }
+}
+
+public class Derived : Base
+{
+    public override void Write(int i = 42)
+    {
+        Console.WriteLine(i);
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        var derived = new Derived();
+        derived.Write(); // writes 42
+        Print(derived);  // writes 42
+    }
+
+    private static void Print(Base item)
+    {
+        item.Write();
+    }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Use the default parameter value defined in the overridden method.</p>
+</li>
+<li>
+<p>Remove the default parameter value to match the signature of overridden method.</p>
+</li>
+<li>
+<p>Add the default parameter value defined in the overridden method.</p>
+</li>
+<li>
+<p>Remove the default parameter value from this explicit interface implementation.</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comments_and_links">Comments And Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_relates_to_s3719">relates to: <a data-rspec-id="S3719" class="rspec-auto-link">S3719</a></h3>
+
+</div>
+</div>
+</div>

@@ -1,0 +1,55 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Testing frameworks like Mocha and Jest provide a way to run a single test case for a file by appending <code>.only()</code> to the test function. This is convenient when debugging a specific use case. It makes, however, no sense to have it in production or development, and it was likely left by mistake after such a debugging session.
+Therefore, it is strongly recommended not to commit usages of <code>.only()</code> to version control.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">describe("MyClass", function () {
+    it.only("should run correctly", function () {
+        /*...*/
+    });
+});</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">describe("MyClass", function () {
+    it("should run correctly", function () {
+        /*...*/
+    });
+});</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://mochajs.org/#exclusive-tests">exclusive tests in Mocha</a></p>
+</li>
+<li>
+<p><a href="https://jestjs.io/docs/next/api#testonlyname-fn-timeout">test.only() in Jest</a></p>
+</li>
+<li>
+<p><a href="https://jestjs.io/docs/next/api#describeonlyname-fn">describe.only() in Jest</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>

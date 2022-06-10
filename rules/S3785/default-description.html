@@ -1,0 +1,60 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>in</code> operator tests whether the specified property is in the specified object.</p>
+</div>
+<div class="paragraph">
+<p>If the right operand is a of primitive type (i.e., not an object) the <code>in</code> operator raises a <code>TypeError</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">var x = "Foo";
+"length" in x; // Noncompliant: TypeError
+0 in x;        // Noncompliant: TypeError</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">var x = new String("Foo");
+"length" in x;    // true
+0 in x;           // true
+"foobar" in x;    // false</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>TypeError can be thrown as this operand might have primitive type.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>Primary: The right operand.</p>
+</div>
+<div class="paragraph">
+<p>Secondary: the operator.</p>
+</div>
+</div>
+</div>
+</div>

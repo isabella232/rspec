@@ -1,0 +1,113 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As a way of minimizing the network and database resources required by a query, only the minimum set of data required should be selected. Thus, when a column&#8217;s value is hard-coded in the <code>WHERE</code> clause, there&#8217;s no need to include it in the list of selected columns. Similarly, when a column is included more than once in a <code>SELECT</code> the additional instances are clearly superfluous, as are any values in an <code>EXISTS</code> subquery <code>SELECT</code> other than 1.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">SELECT id,   -- Noncompliant; we already know the value of id
+  name,
+  city,
+  name  -- Noncompliant; this is the second instance of name
+FROM employee
+WHERE id=1</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">SELECT name,
+  city
+FROM employee
+WHERE id=1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">SELECT 1,
+  name,
+  city
+FROM employee
+WHERE id=1</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Drop "cccc" from the "SELECT" clause; its value is already known from the "WHERE" clause.</p>
+</li>
+<li>
+<p>Remove this instance of "xxx"; it already appears earlier in the "SELECT" list.</p>
+</li>
+<li>
+<p>Simplify this "EXISTS" subquery "SELECT" 1.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>primary for 1 &amp; 2: redundant column name in select</p>
+</li>
+<li>
+<p>secondary for 1: <code>col = 'value'</code> in where clause</p>
+</li>
+<li>
+<p>secondary for 2: 1st instance of <code>col</code> in <code>SELECT</code></p>
+</li>
+<li>
+<p>primary for 3: entire <code>SELECT</code> clause of subquery</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comments_and_links">Comments And Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_on_16_jun_2016_144137_ann_campbell_wrote">on 16 Jun 2016, 14:41:37 Ann Campbell wrote:</h3>
+<div class="paragraph">
+<p><a href="https://www.researchgate.net/publication/222432151_Semantic_errors_in_SQL_queries_A_quite_complete_list" class="bare">https://www.researchgate.net/publication/222432151_Semantic_errors_in_SQL_queries_A_quite_complete_list</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_on_16_jun_2016_172244_ann_campbell_wrote">on 16 Jun 2016, 17:22:44 Ann Campbell wrote:</h3>
+<div class="paragraph">
+<p>for <code>EXISTS</code> subquery selects, a single, non-1 value should be ignored.</p>
+</div>
+</div>
+</div>
+</div>

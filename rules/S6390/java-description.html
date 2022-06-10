@@ -1,0 +1,89 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>User-provided data, such as URL parameters, POST data payloads, or cookies, are tainted with user-controlled inputs. Therefore, they should always be considered untrusted.</p>
+</div>
+<div class="paragraph">
+<p>Using user-controlled data to define the suspension time of threads execution could allow attackers to suspend thread execution for a long period of time.</p>
+</div>
+<div class="paragraph">
+<p>Web servers generally have a limited amount of threads that can run in parallel. With a few requests, attackers can cause a Denial of Service, making the application unavailable for all users.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recommended_secure_coding_practices">Recommended Secure Coding Practices</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Avoid using user-controlled data to define thread execution suspension time.</p>
+</li>
+<li>
+<p>Define a maximum suspension time.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  Long time = Long.parseLong(req.getParameter("time"));
+  Thread.sleep(time); // Noncompliant
+  // ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  Long time = Long.parseLong(req.getParameter("time"));
+  Thread.sleep(Math.min(inputTime, 1000));
+  // ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://owasp.org/Top10/A03_2021-Injection/">OWASP Top 10 2021 Category A3</a> - Injection</p>
+</li>
+<li>
+<p><a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection">OWASP Top 10 2017 Category A1</a> - Injection</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/400">MITRE, CWE-400</a> - Uncontrolled Resource Consumption</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Change this code to prevent user-controlled data from being used as a thread suspension duration.</p>
+</div>
+</div>
+</div>
+</div>

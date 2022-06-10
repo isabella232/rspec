@@ -1,0 +1,65 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The most specific assertion methods possible should always be prefered to the use of <code>assertTrue</code>, when the argument requires further processing. Doing so yields cleaner, clearer code, and therefore easier maintenance.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">assertTrue(a == null); // Noncompliant
+assertFalse(a != null); // Noncompliant
+
+assertTrue(b != null); // Noncompliant
+assertFalse(b == null); // Noncompliant
+
+assertTrue(a == b);  // Noncompliant
+assertFalse(a != b); // Noncompliant
+
+assertTrue(a.equals(b)); // Noncompliant
+assertFalse( !a.equals(b)); // Noncompliant
+
+assertTrue(!a); // Noncompliant
+assertFalse(!b); // Noncompliant</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">assertNull(a);
+
+assertNotNull(b);
+
+assertSame(a, b);
+
+assertEqual(a, b);
+
+assertFalse(a);
+assertTrue(b);</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Use "[assertEquals|assertSame|assertNull|assertNotNull|assertFalse|assertTrue]" instead of "[assertTrue|assertFalse]".</p>
+</div>
+</div>
+</div>
+</div>

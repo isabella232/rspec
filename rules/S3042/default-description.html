@@ -1,0 +1,75 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The purpose of synchronization is to ensure that only one thread executes a given block of code at a time. There&#8217;s no real problem with marking <code>writeObject</code> <code>synchronized</code>, but it&#8217;s highly suspicious if this serialization-related method is the only <code>synchronized</code> code in a <code>class</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class RubberBall {
+
+  private Color color;
+  private int diameter;
+
+  public RubberBall(Color color, int diameter) {
+    // ...
+  }
+
+  public void bounce(float angle, float velocity) {
+    // ...
+  }
+
+  private synchronized void writeObject(ObjectOutputStream stream) throws IOException { // Noncompliant
+    // ...
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class RubberBall {
+
+  private Color color;
+  private int diameter;
+
+   public RubberBall(Color color, int diameter) {
+    // ...
+  }
+
+  public void bounce(float angle, float velocity) {
+    // ...
+  }
+
+  private void writeObject(ObjectOutputStream stream) throws IOException {
+    // ...
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Remove this "synchronized" keyword.</p>
+</div>
+</div>
+</div>
+</div>

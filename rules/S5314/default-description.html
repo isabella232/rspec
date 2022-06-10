@@ -1,0 +1,26 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When entering a critical section the program holds a lock that can be hold by a single entity at a time. It is then recommended that the critical section is reduced to the minimum required and executed without any interruption.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">void f() {
+  std::mutex m;
+  // ...
+  m.lock();
+  // ...
+  sleep(1); // Noncompliant
+  // ...
+  m.unlock();
+}</code></pre>
+</div>
+</div>
+</div>
+</div>

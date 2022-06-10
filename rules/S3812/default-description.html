@@ -1,0 +1,67 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Mixing up the order of operations will almost always yield unexpected results.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, mis-applied negation will also yield bad results. For instance consider the difference between <code>!key in dict</code> and <code>!(key in dict)</code>. The first looks for a boolean value (<code>!key</code>) in <code>dict</code>, and the other looks for a string and inverts the result. <code>!obj instanceof SomeClass</code> has the same problem.</p>
+</div>
+<div class="paragraph">
+<p>This rule raises an issue when the left operand of an <code>in</code> or <code>instanceof</code> operator is negated.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">if (!"prop" in myObj) {  // Noncompliant;  "in" operator is checking property "false"
+  doTheThing();  // this block will be never executed
+}
+
+if (!foo instanceof MyClass) {  // Noncompliant; "!foo" returns a boolean, which is not an instance of anything
+  doTheOtherThing();  // this block is never executed
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">if (!("prop" in myObj)) {
+  doTheThing();
+}
+
+if (!(foo instanceof MyClass)) {
+  doTheOtherThing();
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Add parentheses to disambiguate this expression.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>minus operator</p>
+</div>
+</div>
+</div>
+</div>

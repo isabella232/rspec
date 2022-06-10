@@ -1,0 +1,113 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Applications that allow execution of operating system commands from user-controlled data should control the arguments passed to the command, otherwise an attacker can inject additional arbitrary arguments which can change the behavior of the command.</p>
+</div>
+<div class="paragraph">
+<p>User-controlled arguments should be sanitized by neutralizing argument delimiters (eg: <code>'</code>, space, <code>-</code>) and thus preventing injection of unwanted additional arguments. A single user-controlled argument may still lead to vulnerabilities if it corresponds to a dangerous option supported by the command, such as <code>-exec</code> available with <a href="https://linux.die.net/man/1/find">find</a>, in that case, mark end of option processing on the command line using <code>--</code> (double-dash) or restrict the options to only trusted values.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>escapeshellcmd</code> doesn&#8217;t prevent additional arguments from being injected:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">/*
+   here the attacker can cat any files, not only the ones suffixed with "_public.txt",
+   by passing additional arguments such as "data_private.csv /tmp/data"
+*/
+exec(escapeshellcmd("/usr/bin/cat /tmp/".$_GET["arg"]."_public.txt")); // Noncompliant</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>escapeshellcmd</code> cancels any prior sanitization with <code>escapeshellarg</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">exec(escapeshellcmd("/usr/bin/cat ".escapeshellarg("/tmp/".$_GET["arg"]."_public.txt"))); // Noncompliant</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fifth argument of the <code>mail</code> function accepts arguments that are added to the command line:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">mail($to, $subject, $message, $params, $_GET["arg"]); // Noncompliant
+
+// by default php sanitizes the fifth argument with escapeshellcmd thus escapeshellarg has no effect:
+mail($to, $subject, $message, $params, escapeshellarg($_GET["arg"])); // Noncompliant</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>escapeshellarg</code> should be used to sanitize a specific argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">exec("/usr/bin/cat ".escapeshellarg("/tmp/".$_GET["arg"]."_public.txt"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fifth argument of the <code>mail</code> function can be secured with the use of an allow-list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">$arg = $_GET["arg"];
+if ($arg === "something1" || $arg === "something2") {
+  mail($to, $subject, $message, $params, $arg);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>OWASP OS Command Injection Defense <a href="https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="https://owasp.org/Top10/A03_2021-Injection/">OWASP Top 10 2021 Category A3</a> - Injection</p>
+</li>
+<li>
+<p><a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection">OWASP Top 10 2017 Category A1</a> - Injection</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/88">MITRE, CWE-88</a> - Argument Injection or Modification</p>
+</li>
+<li>
+<p><a href="https://blog.sonarsource.com/why-mail-is-dangerous-in-php">blog.sonarsource.com</a> - Why mail() is dangerous in PHP</p>
+</li>
+<li>
+<p><a href="https://www.sans.org/top25-software-errors/#cat1">SANS Top 25</a> - Insecure Interaction Between Components</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Change this code to not construct OS command arguments from user-controlled data.</p>
+</div>
+</div>
+</div>
+</div>

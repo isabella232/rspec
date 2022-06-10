@@ -1,0 +1,123 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Intent redirections are intents forwarded by a component to another component. It can lead to vulnerabilities such as leak of information when an exported component of the mobile app, like an activity, doesn&#8217;t validate an untrusted intent used to start a component, ie to perform the intent redirection.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A component activity is exported (in this case using an intent-filter) allowing it to be launched by other mobile applications:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">&lt;activity android:name=".Noncompliant"&gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name="noncompliantaction" /&gt;
+    &lt;/intent-filter&gt;
+&lt;/activity&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then this activity retrieves the embedded untrusted intent used to start an arbitrary component:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class Noncompliant extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // The intent used to start this exported component is retrieved
+        Intent intent = getIntent();
+
+        // extract the embedded Intent
+        Intent forward = (Intent) intent.getParcelableExtra("anotherintent");
+
+        // redirect the embedded Intent
+        startActivity(forward); // Noncompliant
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If it&#8217;s not needed to make visible this component to other apps, do not export it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">&lt;activity android:name=".Noncompliant" android:exported="false"&gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name="noncompliantaction" /&gt;
+    &lt;/intent-filter&gt;
+&lt;/activity&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It&#8217;s also possible to validate the intent to be sure it&#8217;s the expected one:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class Noncompliant extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // The intent used to start this exported component is retrieved
+        Intent intent = getIntent();
+
+        // extract the embedded Intent
+        Intent forward = (Intent) intent.getParcelableExtra("anotherintent");
+
+        ComponentName name = forward.resolveActivity(getPackageManager());
+        if (name.getPackageName().equals("package") &amp;&amp;
+                name.getClassName().equals("nonsensitiveclass")) {
+            // redirect the embedded Intent
+            startActivity(forward);
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://support.google.com/faqs/answer/9267555?hl=en">support.google.com</a> - Remediation for Intent Redirection Vulnerability</p>
+</li>
+<li>
+<p><a href="https://mobile-security.gitbook.io/masvs/security-requirements/0x11-v6-interaction_with_the_environment">Mobile AppSec Verification Standard</a> - Platform Interaction Requirements</p>
+</li>
+<li>
+<p><a href="https://owasp.org/www-project-mobile-top-10/2016-risks/m1-improper-platform-usage">OWASP Mobile Top 10 2016 Category M1</a> - Improper Platform Usage</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/20">MITRE, CWE-20</a> - Improper Input Validation</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Change this code to not perform arbitrary intent redirection.</p>
+</div>
+<hr>
+</div>
+</div>
+</div>

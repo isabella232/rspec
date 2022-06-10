@@ -1,0 +1,92 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When <code>List.remove()</code> is called it will shrink the list. If this is done inside the ascending loop iterating through all elements it will skip the element after the removed index.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">void removeFrom(List&lt;String&gt; list) {
+  // expected: iterate over all the elements of the list
+  for (int i = 0; i &lt; list.size(); i++) {
+    if (list.get(i).isEmpty()) {
+      // actual: remaining elements are shifted, so the one immediately following will be skipped
+      list.remove(i); // Noncompliant
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can either adjust the loop index to account for the change in the size of the list</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">static void removeFrom(List&lt;String&gt; list) {
+    // expected: iterate over all the elements of the list
+    for (int i = 0; i &lt; list.size(); i++) {
+      if (list.get(i).isEmpty()) {
+        // actual: remaining elements are shifted, so the one immediately following will be skipped
+        list.remove(i);
+        i--;
+      }
+    }
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or preferably it&#8217;s probably better to rely on Java 8&#8217;s <code>removeIf</code> method</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"> static void removeFrom(List&lt;String&gt; list) {
+    list.removeIf(String::isEmpty);
+  }</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exceptions">Exceptions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The descending loop doesn&#8217;t have this issue, because the index will be correct when we loop in descending order</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>void removeFrom(List&lt;String&gt; list) {
+  for (int i = list.size() - 1; i &gt;= 0; i--) {
+    if (list.get(i).isEmpty()) {
+      list.remove(i);
+    }
+  }
+}</pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Verify that "remove()" is used correctly</p>
+</div>
+</div>
+</div>
+</div>

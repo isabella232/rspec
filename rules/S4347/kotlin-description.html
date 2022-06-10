@@ -1,0 +1,102 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>java.security.SecureRandom</code> class provides a strong random number generator (RNG) appropriate for cryptography. However, seeding it with a constant or another predictable value will weaken it significantly. In general, it is much safer to rely on the seed provided by the <code>SecureRandom</code> implementation.</p>
+</div>
+<div class="paragraph">
+<p>This rule raises an issue when <code>SecureRandom.setSeed()</code> or <code>SecureRandom(byte[])</code> are called with a seed that is either one of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a constant</p>
+</li>
+<li>
+<p>the system time</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">val sr = SecureRandom()
+sr.setSeed(123456L) // Noncompliant
+val v = sr.nextInt()</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">val sr = SecureRandom("abcdefghijklmnop".toByteArray(charset("us-ascii"))) // Noncompliant
+val v = sr.nextInt()</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">val sr = SecureRandom()
+val v = sr.nextInt()</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/">OWASP Top 10 2021 Category A2</a> - Cryptographic Failures</p>
+</li>
+<li>
+<p><a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security Misconfiguration</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/330">MITRE, CWE-330</a> - Use of Insufficiently Random Values</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/332">MITRE, CWE-332</a> - Insufficient Entropy in PRNG</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/336">MITRE, CWE-336</a> - Same Seed in Pseudo-Random Number Generator (PRNG)</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/337">MITRE, CWE-337</a> - Predictable Seed in Pseudo-Random Number Generator (PRNG)</p>
+</li>
+<li>
+<p><a href="https://wiki.sei.cmu.edu/confluence/display/java/MSC63-J.+Ensure+that+SecureRandom+is+properly+seeded">CERT, MSC63J.</a> - Ensure that SecureRandom is properly seeded</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Change this seed value to something unpredictable, or remove the seed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>The call to SecureRandom.setSeed() or the SecureRandom(byte[]) constructor call</p>
+</div>
+<hr>
+</div>
+</div>
+</div>

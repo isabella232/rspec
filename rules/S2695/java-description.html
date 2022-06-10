@@ -1,0 +1,66 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The parameters in a <code>PreparedStatement</code> are indexed beginning at 1, not 0, so using any "set" method of a <code>PreparedStatement</code> with a number less than 1 is a bug, as is using an index higher than the number of parameters. The same indexing style also applies to <code>ResultSet</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">PreparedStatement ps = con.prepareStatement("SELECT fname, lname FROM employees where hireDate &gt; ? and salary &lt; ?");
+ps.setDate(0, date);  // Noncompliant
+ps.setDouble(3, salary);  // Noncompliant
+
+ResultSet rs = ps.executeQuery();
+while (rs.next()) {
+  String fname = rs.getString(0);  // Noncompliant
+  // ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">PreparedStatement ps = con.prepareStatement("SELECT fname, lname FROM employees where hireDate &gt; ? and salary &lt; ?");
+ps.setDate(1, date);
+ps.setDouble(2, salary);
+
+ResultSet rs = ps.executeQuery();
+while (rs.next()) {
+  String fname = rs.getString(1);
+  // ...
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>"[PreparedStatement|ResultSet]" indices start at 1.</p>
+</li>
+<li>
+<p>This "PreparedStatement" only has n parameters.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>

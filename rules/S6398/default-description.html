@@ -1,0 +1,163 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>User-provided data, such as URL parameters, POST data payloads, or cookies, are tainted with user-controlled inputs. Therefore, they should always be considered untrusted.</p>
+</div>
+<div class="paragraph">
+<p>JSON injection occurs when user-controlled input is embedded into JSON syntax.</p>
+</div>
+<div class="paragraph">
+<p>In such a scenario, an attacker can alter the semantics of the underlying JSON object and insert additional properties, modify existing properties or change the JSON object in some other way that potentially affects the business logic of the program processing that JSON object.</p>
+</div>
+<div class="paragraph">
+<p>An attacker may exploit such a vulnerability in a variety of ways, depending on the business logic. In the worst case, it may even be possible for the attacker to execute arbitrary code.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  String json = "{\"key\":\""+req.getParameter("value")+"\"}";
+  FileOutputStream fos = new FileOutputStream("output.json");
+  fos.write(json.getBytes(Charset.forName("UTF-8")));  // Noncompliant
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/google/gson">google/gson</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  Gson gson = new Gson();
+  String json = "{\"key\":\""+req.getParameter("value")+"\"}";
+  Object object = gson.fromJson(json, Object.class); // Noncompliant
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/FasterXML/jackson">FasterXML/jackson</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  ObjectMapper mapper = new ObjectMapper();
+  JsonFactory jsonFactory = mapper.getFactory();
+  JsonGenerator generator = jsonFactory.createGenerator(System.out);
+
+  String json = "{\"key\":\""+req.getParameter("value")+"\"}";
+  generator.writeRaw(json); // Noncompliant
+  generator.close();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/stleary/JSON-java">stleary/JSON-java</a> (org.json)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  String json = "{\"key\":\""+req.getParameter("value")+"\"}";
+  JSONObject jo = new JSONObject(json); // Noncompliant
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  String value = req.getParameter("value");
+  if(value.matches("^[A-Za-z0-9_]+$")) {
+    String json = "{\"key\":\""+value+"\"}";
+    FileOutputStream fos = new FileOutputStream("output.json");
+    fos.write(json.getBytes(Charset.forName("UTF-8")));
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/google/gson">google/gson</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  Gson gson = new Gson();
+  JsonObject json = new JsonObject();
+  json.addProperty("key", req.getParameter("value"));
+  Object object = gson.fromJson(json, Object.class);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/FasterXML/jackson">FasterXML/jackson</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  ObjectMapper mapper = new ObjectMapper();
+  JsonFactory jsonFactory = mapper.getFactory();
+  JsonGenerator generator = jsonFactory.createGenerator(System.out);
+
+  generator.writeStartObject();
+  enerator.writeFieldName("key");
+  generator.writeString(req.getParameter("value"));
+  generator.close();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/stleary/JSON-java">stleary/JSON-java</a> (org.json)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  JSONObject jo = new JSONObject();
+  jo.append("key", req.getParameter("value"));
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://owasp.org/Top10/A03_2021-Injection/">OWASP Top 10 2021 Category A3</a> - Injection</p>
+</li>
+<li>
+<p><a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection">OWASP Top 10 2017 Category A1</a> - Injection</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/20">MITRE, CWE-20</a> - Improper Input Validation</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/76">MITRE, CWE-76</a> - Improper Neutralization of Equivalent Special Elements</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Change this code to not construct JSON documents directly from user-controlled data.</p>
+</div>
+</div>
+</div>
+</div>

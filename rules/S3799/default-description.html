@@ -1,0 +1,58 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Destructuring is a convenient way of extracting multiple values from data stored in (possibly nested) objects and arrays. However, it is possible to create an empty pattern that has no effect. When empty curly braces or brackets are used to the right of a property name most of the time the intent was to use a default value instead.</p>
+</div>
+<div class="paragraph">
+<p>This rule raises an issue when empty destructuring pattern is used.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">var {a: {}, b} = myObj; // Noncompliant
+function foo({first: [], second}) { // Noncompliant
+  // ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">var {a = {}, b} = myObj;
+function foo({first = [], second}) {
+  // ...
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Change this pattern to not be empty.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>empty destructuring pattern</p>
+</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,243 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>XML standard allows the use of entities, declared in the DOCTYPE of the document, which can be <a href="https://www.w3.org/TR/xml/#sec-internal-ent">internal</a> or <a href="https://www.w3.org/TR/xml/#sec-external-ent">external</a>.</p>
+</div>
+<div class="paragraph">
+<p>When parsing the XML file, the content of the external entities is retrieved from an external storage such as the file system or network, which may lead, if no restrictions are put in place, to arbitrary file disclosures or <a href="https://www.owasp.org/index.php/Server_Side_Request_Forgery">server-side request forgery (SSRF)</a> vulnerabilities.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s recommended to limit resolution of external entities by using one of these solutions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If DOCTYPE is not necessary, completely disable all DOCTYPE declarations.</p>
+</li>
+<li>
+<p>If external entities are not necessary, completely disable their declarations.</p>
+</li>
+<li>
+<p>If external entities are necessary then:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Use XML processor features, if available, to authorize only required protocols (eg: https).</p>
+</li>
+<li>
+<p>And use an entity resolver (and optionally an XML Catalog) to resolve only trusted entities.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="http://xerces.apache.org/">Xerces</a> XercesDOMParser library:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">#include "xercesc/parsers/XercesDOMParser.hpp"
+
+XercesDOMParser *DOMparser = new XercesDOMParser();
+// no entity reference node will be created so the entities will be expanded
+DOMparser-&gt;setCreateEntityReferenceNodes(false); // Noncompliant
+DOMparser-&gt;setDisableDefaultEntityResolution(false); // Noncompliant
+
+DOMparser-&gt;parse(xmlFile);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="http://xerces.apache.org/">Xerces</a> SAX2XMLReader library:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">#include "xercesc/sax2/SAX2XMLReader.hpp"
+SAX2XMLReader* reader = XMLReaderFactory::createXMLReader(); // Noncompliant: by default entities resolution is enabled so SAX2XMLReader is not safe
+reader-&gt;setFeature(XMLUni::fgXercesDisableDefaultEntityResolution, false); // Noncompliant: enable resolution of entities explicitly
+
+reader-&gt;parse(xmlFile);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="http://xerces.apache.org/">Xerces</a> SAXParser library:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">#include "xercesc/parsers/SAXParser.hpp"
+
+SAXParser* SAXparser = new SAXParser(); // Noncompliant: by default entities resolution is enabled so SAXParser is not safe
+SAXparser-&gt;setDisableDefaultEntityResolution(false); // Noncompliant: enable resolution of entities explicitly
+
+SAXparser-&gt;parse(xmlFile);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="http://xmlsoft.org/">LibXML2</a> library:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">#include "libxml/parser.h"
+
+xmlDocPtr doc = xmlReadFile(xmlFile, nullptr, XML_PARSE_DTDLOAD | XML_PARSE_NOENT); // Noncompliant</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="http://xerces.apache.org/">Xerces</a> XercesDOMParser library:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">#include "xercesc/parsers/XercesDOMParser.hpp"
+
+XercesDOMParser *DOMparser = new XercesDOMParser(); // by default XercesDOMParser is safe
+DOMparser-&gt;setCreateEntityReferenceNodes(true); // Compliant: explicitly make the parser safe to XXE vulnerability
+DOMparser-&gt;setDisableDefaultEntityResolution(true); // Compliant
+
+DOMparser-&gt;parse(xmlFile);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="http://xerces.apache.org/">Xerces</a> SAX2XMLReader library:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">#include "xercesc/sax2/SAX2XMLReader.hpp"
+
+SAX2XMLReader* reader = XMLReaderFactory::createXMLReader();
+reader-&gt;setFeature(XMLUni::fgXercesDisableDefaultEntityResolution, true); // Compliant
+
+reader-&gt;parse(xmlFile);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="http://xerces.apache.org/">Xerces</a> SAXParser library:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">#include "xercesc/parsers/SAXParser.hpp"
+
+SAXParser* SAXparser = new SAXParser();
+SAXparser-&gt;setDisableDefaultEntityResolution(true); // Compliant
+
+SAXparser-&gt;parse(xmlFile);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="http://xmlsoft.org/">LibXML2</a> library:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">#include "libxml/parser.h"
+
+xmlDocPtr doc = xmlReadFile(xmlFile, nullptr, 0); // Compliant: safe by default since version 2.9</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP Top 10 2021 Category A5</a> - Security Misconfiguration</p>
+</li>
+<li>
+<p><a href="https://www.owasp.org/index.php/Top_10-2017_A4-XML_External_Entities_(XXE)">OWASP Top 10 2017 Category A4</a> - XML External Entities (XXE)</p>
+</li>
+<li>
+<p><a href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html#libxerces-c">OWASP XXE Prevention Cheat Sheet for Xerces</a></p>
+</li>
+<li>
+<p><a href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html#libxml2">OWASP XXE Prevention Cheat Sheet for LibXML2</a></p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/611">MITRE, CWE-611</a> - Information Exposure Through XML External Entity Reference</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/827">MITRE, CWE-827</a> - Improper Control of Document Type Definition</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Disable access to external entities in XML parsing.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>Java: Instantiation of the XMLInputFactory or SAXParserFactory or XMLReader or DocumentBuilderFactory or DocumentBuilder object</p>
+</div>
+<div class="paragraph">
+<p>Primary: where the xml parsing is done / incorrect options are used</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Secondary: where the xml option enable external entities</p>
+<div class="ulist">
+<ul>
+<li>
+<p>message: "This value enables external entities in XML parsing."</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comments_and_links">Comments And Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_deprecates_s4435">deprecates: <a data-rspec-id="S4435" class="rspec-auto-link">S4435</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_on_23_mar_2015_195642_ann_campbell_wrote">on 23 Mar 2015, 19:56:42 Ann Campbell wrote:</h3>
+<div class="paragraph">
+<p><a href="https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing" class="bare">https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_on_20_jul_2015_073417_ann_campbell_wrote">on 20 Jul 2015, 07:34:17 Ann Campbell wrote:</h3>
+<div class="paragraph">
+<p>Tagged java-top by Ann [~nicolas.peru]</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_on_25_jan_2022_103400_quentin_jaquier_wrote">on 25 Jan 2022, 10:34:00 Quentin Jaquier wrote:</h3>
+<div class="paragraph">
+<p>Quick fixes (for Java): even if it is technically possible to provide a fix that would result in compliant code, it does not sound wise to set properties blindly, as it can have side effects. Fixing the issue requires a careful and good understanding of the overall context of the code.</p>
+</div>
+</div>
+</div>
+</div>

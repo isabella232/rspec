@@ -1,0 +1,55 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consistent use of "None" in flags enumerations indicates that all flag values are cleared. The value 0 should not be used to indicate any other state, since there is no way to check that the bit <code>0</code> is set.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">&lt;Flags()&gt;
+Enum FruitType
+    Void = 0        ' Non-Compliant
+    Banana = 1
+    Orange = 2
+    Strawberry = 4
+End Enum</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">&lt;Flags()&gt;
+Enum FruitType
+    None = 0        ' Compliant
+    Banana = 1
+    Orange = 2
+    Strawberry = 4
+End Enum</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Rename "xxx" to "None".</p>
+</div>
+</div>
+</div>
+</div>

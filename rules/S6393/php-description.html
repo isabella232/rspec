@@ -1,0 +1,85 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The pattern provided to PHP regular expression functions is required to be enclosed in valid delimiters. Failing to do so will result in a PHP warning and the pattern never matching. Since the warning only appears during runtime when the pattern is evaluated, such a mistake risks to get unnoticed into production.</p>
+</div>
+<div class="paragraph">
+<p>A delimiter can be any character that is not alphanumeric, a backslash, or a whitespace. Bracket style delimiters are also allowed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">// Condition will always evaluate to false
+if (preg_match("/.*", $input)) {
+    echo "true";
+} else {
+    echo "false";
+}
+
+// Unclosed bracket delimiters
+$result = preg_match("[abc", $input);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">if (preg_match("/.*/", $input)) {
+    echo "true";
+} else {
+    echo "false";
+}
+
+$result = preg_match("[abc]", $input);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.php.net/manual/en/regexp.reference.delimiters.php">Delimiters</a> - PHP Documentation</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>In case there is no opening delimiter: Add delimiters to this regular expression.</p>
+</li>
+<li>
+<p>In case there is no closing delimiter (x being the appropriate end delimiter): Add the missing "x" delimiter to this regular expression.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>The string representing the regular expression.</p>
+</div>
+</div>
+</div>
+</div>

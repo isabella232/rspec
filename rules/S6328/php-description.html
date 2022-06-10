@@ -1,0 +1,69 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The PHP function <code>preg_replace</code> can be used to perform a search and replace based on regular expression matches. The <code>$replacement</code> parameter can contain references to capturing groups used in the <code>$pattern</code> parameter. This can be achieved with <code>\n</code> or <code>$n</code> to reference the n&#8217;th group.</p>
+</div>
+<div class="paragraph">
+<p>When referencing a nonexistent group, it will be substituted with an empty string. This is in general not the intended behavior, and might stay unnoticed since no warning is raised.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">preg_replace("/(a)(b)(c)/", "\\1, \\9, \\3", "abc"); // Noncompliant - result is "a, , c"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">preg_replace("/(a)(b)(c)/", "\\1, \\2, \\3", "abc");</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.php.net/manual/en/function.preg-replace.php">preg_replace</a> - PHP Documentation</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_message">Message</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Make sure to reference an existing group.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_highlighting">Highlighting</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The reference to the group that does not exist.</p>
+</div>
+<hr>
+</div>
+</div>

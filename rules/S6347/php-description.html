@@ -1,0 +1,55 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>WordPress makes it possible to define options using <code>define</code> statements inside a configuration file named <code>wp-config.php</code>. However, if <code>define</code> statements are located at the end of this file, they are ignored by WordPress. This rule raises an issue when a <code>define</code> statement appears after <code>wp-settings.php</code> is loaded.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">// in wp-config.php
+
+define( 'WP_DEBUG', false );
+
+/* Add any custom values between this line and the "stop editing" line. */
+
+
+/* That's all, stop editing! Happy publishing. */
+
+if ( ! defined( 'ABSPATH' ) ) {
+        define( 'ABSPATH', __DIR__ . '/' );
+}
+require_once ABSPATH . 'wp-settings.php';
+
+define( 'WP_POST_REVISIONS', 3 ); // Noncompliant</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">// in wp-config.php
+
+define( 'WP_DEBUG', false );
+
+/* Add any custom values between this line and the "stop editing" line. */
+
+define( 'WP_POST_REVISIONS', 3 ); // Noncompliant
+
+/* That's all, stop editing! Happy publishing. */
+
+if ( ! defined( 'ABSPATH' ) ) {
+        define( 'ABSPATH', __DIR__ . '/' );
+}
+require_once ABSPATH . 'wp-settings.php';</code></pre>
+</div>
+</div>
+</div>
+</div>

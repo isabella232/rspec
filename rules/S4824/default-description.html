@@ -1,0 +1,73 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When a reference is used in a <code>foreach</code> loop instead of using a simple variable, the reference remains assigned and keeps its "value" which is a reference, even after the <code>foreach</code> execution. Most of the time, this is not what the developer is expecting and the reference may be used wrongly in the rest of the code. For this reason, it is recommended to always <code>unset</code> a reference that is used in a <code>foreach</code> to avoid any unexpected side effects.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">$arr = array(1, 2, 3);
+foreach ($arr as &amp;$value) { // Noncompliant; $value is still alive after the loop and references the last item of the array: $arr[2]
+    $value = $value * 2;
+}
+$value = 'x';</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">$arr = array(1, 2, 3);
+foreach ($arr as &amp;$value) { // Compliant; there is no risk to use by mistake the content of $value pointing to $arr[2]
+    $value = $value * 2;
+}
+unset($value);
+$value = 'x';</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>PHP Documentation: <a href="https://php.net/manual/en/control-structures.foreach.php">Foreach </a></p>
+</li>
+<li>
+<p><a href="https://schlueters.de/blog/archives/141-References-and-foreach.html">References and Foreach</a></p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Unset XXX just after the end of the foreach loop to avoid side effects.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>The reference declaration in the foreach</p>
+</div>
+</div>
+</div>
+</div>

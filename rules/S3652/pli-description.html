@@ -1,0 +1,74 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The hazards of division by zero are well known, but easy to overlook when the zero is obfuscated by a column name.</p>
+</div>
+<div class="paragraph">
+<p>This rule raises an issue when a column that is not constrained to be non-zero is used as the denominator in division or modulo in a <code>WHERE</code> clause. Such an issue is raised <em>even if</em> the <code>WHERE</code> clause contains a condition limiting the column to non-zero values because the evaluation sequence of <code>WHERE</code> clauses is not guaranteed.</p>
+</div>
+<div class="paragraph">
+<p>An issue is also raised if such a column is used in division or modulo in a <code>SELECT</code> clause and there&#8217;s no <code>WHERE</code> clause condition to limit the value to non-zero.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">SELECT id, name
+FROM product
+WHERE price / discount &gt; .3  -- Noncompliant
+  AND discount &gt; 0</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Constrain "cccc" to be non-zero, or refactor this condition.</p>
+</li>
+<li>
+<p>Add a "WHERE" clause condition to constrain this column to non-zero values.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p><code>/ numeric_not-non-zero_column</code></p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comments_and_links">Comments And Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_relates_to_s3518">relates to: <a data-rspec-id="S3518" class="rspec-auto-link">S3518</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_on_17_jun_2016_155438_ann_campbell_wrote">on 17 Jun 2016, 15:54:38 Ann Campbell wrote:</h3>
+<div class="paragraph">
+<p><a href="https://www.researchgate.net/publication/222432151_Semantic_errors_in_SQL_queries_A_quite_complete_list" class="bare">https://www.researchgate.net/publication/222432151_Semantic_errors_in_SQL_queries_A_quite_complete_list</a></p>
+</div>
+</div>
+</div>
+</div>

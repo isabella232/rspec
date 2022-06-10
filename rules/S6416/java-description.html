@@ -1,0 +1,34 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It&#8217;s common for methods to check the value of their parameters and throw an <code>IllegalArgumentException</code>
+when one of them doesn&#8217;t match a given condition.
+Those conditions are usually mentioned in the javadoc of the method.</p>
+</div>
+<div class="paragraph">
+<p>This rule raises an issue when it detects that a method call has an argument which will trigger an <code>IllegalArgumentException</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">  private void addFirst(Collection&lt;String&gt; collection, String element) {
+    if (collection instanceof List) {
+      ((List&lt;String&gt;) collection).add(0, element);
+    } else {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  public void caller() {
+    // Noncompliant: triggers an IllegalArgumentException because HashSet doesn't implement List
+    addFirst(new HashSet&lt;&gt;(), "hello");
+  }</code></pre>
+</div>
+</div>
+</div>
+</div>

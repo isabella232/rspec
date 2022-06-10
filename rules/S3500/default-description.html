@@ -1,0 +1,47 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Variables declared with <code>const</code> cannot be modified. Unfortunately, attempts to do so don&#8217;t always raise an error; in a non-ES2015 environment, such an attempt might simply be ignored.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">const pi = "yes, please";
+pi = 3.14;  // Noncompliant</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Correct this attempt to modify "xxx" or use "let" in its declaration.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>primary: var name in assignment expression</p>
+</li>
+<li>
+<p>secondary: const declaration</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>

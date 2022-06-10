@@ -1,0 +1,88 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Cloud platforms such as AWS, Azure, or GCP support virtual firewalls that can be used to restrict access to services by controlling inbound and outbound traffic.<br>
+Any firewall rule allowing traffic from all IP addresses to standard network ports on which administration services traditionally listen, such as 22 for SSH, can expose these services to exploits and unauthorized access.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recommended_secure_coding_practices">Recommended Secure Coding Practices</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It&#8217;s recommended to restrict access to remote administration services to only trusted IP addresses. In practice, trusted IP addresses are those held by system administrators or those of <a href="https://aws.amazon.com/quickstart/architecture/linux-bastion/?nc1=h_ls">bastion-like</a> servers.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An ingress rule allowing all inbound SSH traffic:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cloudformation" data-lang="cloudformation">MySecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "noncompliant"
+      VpcId: !Ref myVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22 # SSH traffic
+          CidrIp: "0.0.0.0/0" # from all IP addresses is authorized</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An ingress rule allowing inbound SSH traffic from specific IP addresses:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cloudformation" data-lang="cloudformation">MySecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "compliant"
+      VpcId: !Ref myVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: "1.2.3.0/24"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/284">MITRE, CWE-284</a> - Improper Access Control</p>
+</li>
+<li>
+<p><a href="https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control">OWASP Top 10 2017 Category A5</a> - Broken Access Control</p>
+</li>
+<li>
+<p><a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">OWASP Top 10 2021 Category A1</a> - Broken Access Control</p>
+</li>
+<li>
+<p><a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">AWS Documentation</a> - Security groups for your VPC</p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview">Azure Documentation</a> - Network security groups</p>
+</li>
+<li>
+<p><a href="https://cloud.google.com/vpc/docs/using-firewalls">GCP Documentation</a> - Firewalls</p>
+</li>
+</ul>
+</div>
+</div>
+</div>

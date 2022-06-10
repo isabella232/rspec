@@ -1,0 +1,81 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The concept of <code>Optional</code> is that it will be used when <code>null</code> could cause errors. In a way, it replaces <code>null</code>, and when <code>Optional</code> is in use, there should never be a question of returning or receiving <code>null</code> from a call.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public void doSomething () {
+  Optional&lt;String&gt; optional = getOptional();
+  if (optional != null) {  // Noncompliant
+    // do something with optional...
+  }
+  Optional&lt;String&gt; text = null; // Noncompliant, a variable whose type is Optional should never itself be null
+  // ...
+}
+
+@Nullable // Noncompliant
+public Optional&lt;String&gt; getOptional() {
+  // ...
+  return null;  // Noncompliant
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public void doSomething () {
+  Optional&lt;String&gt; optional = getOptional();
+  optional.ifPresent(
+    // do something with optional...
+  );
+  Optional&lt;String&gt; text = Optional.empty();
+  // ...
+}
+
+public Optional&lt;String&gt; getOptional() {
+  // ...
+  return Optional.empty();
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Remove this null-check of an "Optional".</p>
+</li>
+<li>
+<p>Methods with an "Optional" return type should never return null.</p>
+</li>
+<li>
+<p>Methods with an "Optional" return type should not be "@Nullable".</p>
+</li>
+<li>
+<p>"Optional" variables should not be "@Nullable".</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>

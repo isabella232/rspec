@@ -1,0 +1,27 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Generally it&#8217;s not recommended to modify a collection while it&#8217;s iterated and most JDK collection implementations don&#8217;t support it. This may sometimes lead to a ConcurrentModificationException and it could be the source of incorrect or unspecified behaviors in the code.</p>
+</div>
+<div class="paragraph">
+<p>This rule raises an issue when a method modifies the size of a collection, while the same collection is iterated.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">  public static void foo(List&lt;String&gt; lst) {
+    for (String element : lst) {
+      if (element.startsWith("x")) {
+        lst.remove(element); // Noncompliant: lst size has been modified by "remove" call while it's iterated.
+      }
+    }
+  }</code></pre>
+</div>
+</div>
+</div>
+</div>

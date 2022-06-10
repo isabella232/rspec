@@ -1,0 +1,63 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Running finalizers on JVM exit is disabled by default. It can be enabled with <code>System.runFinalizersOnExit</code> and <code>Runtime.runFinalizersOnExit</code>, but both methods are deprecated because they are inherently unsafe.</p>
+</div>
+<div class="paragraph">
+<p>According to the Oracle Javadoc:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>It may result in finalizers being called on live objects while other threads are concurrently manipulating those objects, resulting in erratic behavior or deadlock.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>If you really want to execute something when the virtual machine begins its shutdown sequence, you should attach a shutdown hook.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">fun main() {
+  ...
+  System.runFinalizersOnExit(true)  // Noncompliant
+  ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">fun main() {
+    Runtime.getRuntime().addShutdownHook(object : Thread() {
+        override fun run() {
+            doSomething()
+        }
+    })
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://wiki.sei.cmu.edu/confluence/x/4jZGBQ">CERT, MET12-J.</a> - Do not use finalizers. Although this resource talks about Java, the underlying information concerning the JVM are just as relevant for Kotlin.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>

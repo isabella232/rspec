@@ -1,0 +1,44 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Not surprisingly, the <code>SafeHandle.DangerousGetHandle</code> method is dangerous. That&#8217;s because it may not return a valid handle. Using it can lead to leaks and vulnerabilities. While it is possible to use the method successfully, it&#8217;s extremely difficult to do correctly, so the method should simply be avoided altogether.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">static void Main(string[] args)
+{
+    System.Reflection.FieldInfo fieldInfo = ...;
+    SafeHandle handle = (SafeHandle)fieldInfo.GetValue(rKey);
+    IntPtr dangerousHandle = handle.DangerousGetHandle();  // Noncompliant
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Refactor to remove this call to "SafeHandle.DangerousGetHandle".</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p><code>SafeHandle.DangerousGetHandle</code></p>
+</div>
+</div>
+</div>
+</div>

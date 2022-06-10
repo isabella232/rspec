@@ -1,0 +1,66 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There&#8217;s no need for multiple, consecutive logging calls. Instead, they should be combined, to save I/O time, especially when the logs are written to file. Further, doing so can improve log output readability in concurrent applications; adjacent logger calls will not necessarily result in adjacent log entries in multithreaded environments.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">int result = doSomething();
+LOGGER.log(LEVEL.info, "doSomething() called");
+LOGGER.log(LEVEL.debug, "doSomething response: %n", result);  // Noncompliant</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">int result = doSomething();
+LOGGER.log(LEVEL.info, "doSomething() called. Response: %n", result);</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Combine this logging call with the one on line x.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Primary: second logging call</p>
+</li>
+<li>
+<p>Secondary: first logging call,</p>
+<div class="ulist">
+<ul>
+<li>
+<p>message: Put everything here</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>

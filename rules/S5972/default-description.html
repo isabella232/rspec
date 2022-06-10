@@ -1,0 +1,78 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The functions of <code>std::string</code> and <code>std::string_view</code> that search inside the string return the character position, and use the special value <code>npos</code> if the pattern was not found. When converted to a boolean, <code>npos</code> is equivalent to <code>true</code>. Therefore, testing if the search succeeded requires to compare the returned value to <code>npos</code>, not to use it in a boolean context.</p>
+</div>
+<div class="paragraph">
+<p>This rule raises an issue when the returned value the following functions are used in a boolean context:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>find</code></p>
+</li>
+<li>
+<p><code>rfind</code></p>
+</li>
+<li>
+<p><code>find_first_of</code></p>
+</li>
+<li>
+<p><code>find_last_of</code></p>
+</li>
+<li>
+<p><code>find_first_not_of</code></p>
+</li>
+<li>
+<p><code>find_last_not_of</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">void f() {
+  std::string s = "";
+  if (s.find("42")) { // Noncompliant
+    // this branch is taken even if "s" doesn't contain "42"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">void f() {
+  std::string s = "";
+  if (s.find("42") != std::string::npos) {
+    // this branch is correctly not taken
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Compare the method result with std::(string|string_view)::npos.</p>
+</div>
+</div>
+</div>
+</div>

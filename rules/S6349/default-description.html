@@ -1,0 +1,32 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>WordPress relies a lot on the configuration located in a file named <code>wp-config.php</code>. This file contains mostly <code>define</code> statements and each of them creates a constant for a given WordPress option. However, no warning appears if an option is misspelled: the statement simply defines a constant which is never used.</p>
+</div>
+<div class="paragraph">
+<p>This rule raises an issue when a file named <code>wp-config.php</code> defines a constant whose name is slightly different from a known WordPress option.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">define( 'DISALLOW_FILE_MOD', true ); // Noncompliant
+define( 'Disallow_File_Mods', true ); // Noncompliant</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-php" data-lang="php">define( 'DISALLOW_FILE_MODS', true );</code></pre>
+</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,71 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Nothing in a non-serializable class will be written out to file, and attempting to serialize such a class will result in an exception being thrown. Only a class that <code>implements Serializable</code> or one that extends such a class can successfully be serialized (or de-serialized).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class Vegetable {  // neither implements Serializable nor extends a class that does
+  //...
+}
+
+public class Menu {
+  public void meal() throws IOException {
+    Vegetable veg;
+    //...
+    FileOutputStream fout = new FileOutputStream(veg.getName());
+    ObjectOutputStream oos = new ObjectOutputStream(fout);
+    oos.writeObject(veg);  // Noncompliant. Nothing will be written
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class Vegetable implements Serializable {  // can now be serialized
+  //...
+}
+
+public class Menu {
+  public void meal() throws IOException {
+    Vegetable veg;
+    //...
+    FileOutputStream fout = new FileOutputStream(veg.getName());
+    ObjectOutputStream oos = new ObjectOutputStream(fout);
+    oos.writeObject(veg);
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Make the "xxx" class "Serializable" or don&#8217;t write it.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>

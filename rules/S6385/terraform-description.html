@@ -1,0 +1,180 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Azure Resource Manager allows creating custom roles that can be assigned to users, groups, or service principals.
+A custom role that grants access to all resources of a subscription will have the same capabilities as the built-in Owner role.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s recommended to limit the number of subscription owners in order to mitigate the risk of being breached by a compromised owner.
+Having a custom role that grants subscription Owner capabilities makes it way more difficult to enforce this limitation.</p>
+</div>
+<div class="paragraph">
+<p>This rule raises an issue when a custom role has an assignable scope set to a Subscription or a Management Group and allows all actions (<code>*</code>)</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recommended_secure_coding_practices">Recommended Secure Coding Practices</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Apply the least privilege principle by creating a custom role with as few permissions as possible.</p>
+</li>
+<li>
+<p>As custom role can be updated, gradually add atomic permissions when required.</p>
+</li>
+<li>
+<p>Limit the assignable scopes of the custom role to a set of Resources or Ressource Groups.</p>
+</li>
+<li>
+<p>When necessary, use the built-in Owner role instead of a custom role granting subscription owner capabilities.</p>
+</li>
+<li>
+<p>Limit the assignments of Owner roles to less than three people or service principals.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sensitive_code_example">Sensitive Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>resource "azurerm_role_definition" "example" { # Sensitive
+  name        = "example"
+  scope       = data.azurerm_subscription.primary.id
+
+  permissions {
+    actions     = ["*"]
+    not_actions = []
+  }
+
+  assignable_scopes = [
+    data.azurerm_subscription.primary.id
+  ]
+}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-terraform" data-lang="terraform">resource "azurerm_role_definition" "example" {
+  name        = "example
+  scope       = data.azurerm_subscription.primary.id
+
+  permissions {
+    actions     = ["Microsoft.Compute/*"]
+    not_actions = []
+  }
+
+  assignable_scopes = [
+    data.azurerm_subscription.primary.id
+  ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">OWASP Top 10 2021 Category A1</a> - Broken Access Control</p>
+</li>
+<li>
+<p><a href="https://owasp.org/Top10/A04_2021-Insecure_Design/">OWASP Top 10 2021 Category A4</a> - Insecure Design</p>
+</li>
+<li>
+<p><a href="https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control.html">OWASP Top 10 2017 Category A5</a> - Broken Access Control</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/266">MITRE, CWE-266</a> - Incorrect Privilege Assignment</p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles">Azure Documentation</a> - Azure custom roles</p>
+</li>
+<li>
+<p><a href="https://docs.microsoft.com/en-us/azure/role-based-access-control/best-practices">Azure Documentation</a> - Best practices for Azure RBAC</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Primary location</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Narrow the number of actions or the assignable scope of this custom role.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Secondary location</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Allows all actions</p>
+</li>
+<li>
+<p>High scope level.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Primary location</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Highlight the <code>azurerm_role_definition</code> resource.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Secondary location</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>*</code> item in the <code>actions</code> list</p>
+</li>
+<li>
+<p>Subscription or Management Group scopes in <code>assignable_scopes</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,58 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>While both <code>new</code> and <code>Create</code> will yield the same <code>Tuple</code>, the <code>Create</code> method automatically infers the argument types, yielding sleeker, more readable code.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">var fastAnimal = new Tuple&lt;string, int&gt;("Cheetah", 93);  // Noncompliant</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">var fastAnimal = Tuple.Create("Cheetah", 93);</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Use the more compact "Create" syntax to instantiate this "Tuple".</p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comments_and_links">Comments And Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_on_8_may_2015_153024_dinesh_bolkensteyn_wrote">on 8 May 2015, 15:30:24 Dinesh Bolkensteyn wrote:</h3>
+<div class="paragraph">
+<p>LGTM</p>
+</div>
+</div>
+</div>
+</div>

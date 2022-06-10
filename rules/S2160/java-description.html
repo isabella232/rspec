@@ -1,0 +1,110 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Extend a class that overrides <code>equals</code> and add fields without overriding <code>equals</code> in the subclass, and you run the risk of non-equivalent instances of your subclass being seen as equal, because only the superclass fields will be considered in the equality test.</p>
+</div>
+<div class="paragraph">
+<p>This rule looks for classes that do all of the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>extend classes that override <code>equals</code>.</p>
+</li>
+<li>
+<p>do not themselves override <code>equals</code>.</p>
+</li>
+<li>
+<p>add fields.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_noncompliant_code_example">Noncompliant Code Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class Fruit {
+  private Season ripe;
+
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (this.class != obj.class) {
+      return false;
+    }
+    Fruit fobj = (Fruit) obj;
+    if (ripe.equals(fobj.getRipe()) {
+      return true;
+    }
+    return false;
+  }
+}
+
+public class Raspberry extends Fruit {  // Noncompliant; instances will use Fruit's equals method
+  private Color ripeColor;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compliant_solution">Compliant Solution</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class Fruit {
+  private Season ripe;
+
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (this.class != obj.class) {
+      return false;
+    }
+    Fruit fobj = (Fruit) obj;
+    if (ripe.equals(fobj.getRipe()) {
+      return true;
+    }
+    return false;
+  }
+}
+
+public class Raspberry extends Fruit {
+  private Color ripeColor;
+
+  public boolean equals(Object obj) {
+    if (! super.equals(obj)) {
+      return false;
+    }
+    Raspberry fobj = (Raspberry) obj;
+    if (ripeColor.equals(fobj.getRipeColor()) {  // added fields are tested
+      return true;
+    }
+    return false;
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Override the "equals" method in this class</p>
+</div>
+</div>
+</div>
+</div>

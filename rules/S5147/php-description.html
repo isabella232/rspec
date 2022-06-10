@@ -1,0 +1,73 @@
+<div class="sect1">
+<h2 id="_description">Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>User-provided data such as URL parameters and POST body-content should always
+be considered untrusted and tainted.</p>
+</div>
+<div class="paragraph">
+<p>Applications that perform NoSQL operations based on tainted data can be
+exploited similarly to regular SQL injection bugs. Depending on the code, the
+same risks exist as with SQL injections: The attacker aims to access sensitive
+information or compromise data integrity. Attacks may involve the injection of
+query operators, JavaScript code, or string operations.</p>
+</div>
+<div class="paragraph">
+<p>This problem can be mitigated by using an Object Document Mapper (ODM) library
+or by validating user-supplied data based on its size or allowed characters.</p>
+</div>
+<div class="paragraph">
+<p>Since PHP allows different types of HTTP parameters, the problem could be
+mitigated by ensuring that the type of the input is a String or by sanitizing
+the user-provided data.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see">See</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://owasp.org/Top10/A03_2021-Injection/">OWASP Top 10 2021 Category A3</a> - Injection</p>
+</li>
+<li>
+<p><a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection">OWASP Top 10 2017 Category A1</a> - Injection</p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/943">MITRE, CWE-943</a> - Improper Neutralization of Special Elements in Data Query Logic</p>
+</li>
+<li>
+<p><a href="https://www.sans.org/top25-software-errors/#cat1">SANS Top 25</a> - Insecure Interaction Between Components</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation_specification">Implementation Specification</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(visible only on this page)</p>
+</div>
+<div class="sect2">
+<h3 id="_message">Message</h3>
+<div class="paragraph">
+<p>Change this code to not construct database queries directly from user-controlled data.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_highlighting">Highlighting</h3>
+<div class="paragraph">
+<p>"[varname]" is tainted (assignments and parameters)</p>
+</div>
+<div class="paragraph">
+<p>this argument is tainted (method invocations)</p>
+</div>
+<div class="paragraph">
+<p>the returned value is tainted (returns &amp; method invocations results)</p>
+</div>
+</div>
+</div>
+</div>
